@@ -1,10 +1,22 @@
 version: 0.2
+
 phases:
+  install:
+    runtime-versions:
+      java: latest
   pre_build:
     commands:
-      - echo "This is a simple buildspec file"
-
+      - echo Nothing to do in the pre_build phase, just clean up...
+      - mvn clean
   build:
     commands:
-      - echo $WEBSITE_BUCKET_NAME
-      - aws s3 cp index.html s3://$WEBSITE_BUCKET_NAME/
+      - echo AWS CodeBuild - Build started on `date`
+      - mvn install
+  post_build:
+    commands:
+      - echo AWS CodeBuild - Build completed on `date`
+artifacts:
+  files:
+    - target/messageUtil-1.0.jar
+    - appspec.yml
+  discard-paths: yes
